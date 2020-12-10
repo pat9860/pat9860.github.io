@@ -1,0 +1,172 @@
+---
+title: 'Project 1: Exploratory Data Analysis'
+author: "SDS348"
+date: '2020-12-02'
+output:
+  html_document:
+    toc: yes
+    toc_float:
+      collapsed: no
+      smooth_scroll: yes
+  pdf_document:
+    toc: no
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE, fig.align = "center", warning = F, message = F,
+tidy=TRUE, tidy.opts=list(width.cutoff=60), R.options=list(max.print=100))
+```
+<P style="page-break-before: always">
+\newpage
+
+
+#### 0. Introduction (4  pts)
+
+  I have chosen two datasets that deal with different types of crime across the United States in 2 different time periods. One dataset (USArrests) looks at arrest statistics for violent crimes across all 50 states in 1973 under the variables "Murder", "Assault", and "Rape", along with the "UrbanPop" statistic that calculates the percent of the population of said state being primarily urban. State name was given as a label for the Y axis and not as its own categorical variable, so I made name of state its own variable ("state").  This data was taken from the McNeil monograph and is pre-installed in R.
+  The second dataset was taken from the website "Dataworld" and uses data taken from the National Inurance Crime Bureau's annual "Hot Wheels" report that shows that 10 most stolen vehicles by state, including Washington D.C. We have 2 categorical variables in "state" and "make_model", which is the model of the car; we also have the rank (1-10) of each car ("rank"), the model year for each vehicle ("model_year"), and the number of thefts of that car that year ("thefts"). These datasets interested me because I wanted to see if states that had a history of violent crime would also have a proclivity towards other types of crime. Specifically, I am interested in seeing if the states that were historically more violent kept up with the levels of crime and have more car thefts than states that were historically less violent. 
+```{R}
+library(tidyverse)
+
+car_thefts <- read_csv("car_thefts.csv")
+data("USArrests")
+Arrests <- USArrests %>% 
+  mutate(state = state.name)
+glimpse(Arrests)
+glimpse(car_thefts)
+head(car_thefts)
+head(Arrests)
+``` 
+#### 1. Tidying: Rearranging Wide/Long (8 pts)
+Both datasets were already tidy, so I waited until after the descriptive statistics were obtained before using pivot_wider to spread out the data to be able to see the values broken down in a wider table format from the original categorical variable that they were grouped by. 
+```{R}
+
+```
+#### 2. Joining/Merging (8 pts)
+
+  I decided to join both datasets using a full join, joining on the variable "state". Both datasets are looking at different types of crime by states, with the only difference being that the car_thefts dataset also looked at statistics for Washington D.C. 
+  The decision to do a full join was due wanting to see a comprehensive breakdown of these statistics by each state. I am not looking exclusively at the crime trends of one over the other and instead and interested in seeing if a pattern is developing, which to me is visualized better using a full join. 
+  A new dataset called joined_data was made by piping the Arrests data set into a full join with car_thefts. Considering that there were more observations in the car_thefts dataset, the data from the Arrests data was duplicated for each of the different observations. Using the summarize function and looking at distinct entries for each numeric column, I was able to see all of the entries in eahc of our numeric variables. Some issues may appear, specifically in the joining variable with Washinton D.C. not being present in the Arrests dataset, thus creating NA's in my joined dataset for all of the variables imported from the Arrests dataset. 
+```{R}
+joined_data <- Arrests %>% full_join(car_thefts)
+glimpse(joined_data)
+joined_data %>% summarize_all(n_distinct)
+joined_data %>% summarize_if(is.numeric, n_distinct, na.rm = T)
+
+```
+#### 3. Wrangling (40 pts)
+  There were a couple of different statistics than I ran out of my own curiosity to see if there was actually correlation between historically violent areas and modern crimme. I first examined the average arrests for murder, assault, rape and number of car thefts in areas that historically had an urban population greater than 50, were in the top 5 of car thefts, and were newer car models. Under these conditions, there were high numbers of arrests historically and a very high number of car thefts. Looking just at Texas, I wanted to see the percent difference in thefts between each rank value. This data was then spread out using pivot_wider to see these values more appropriately. We saw greater differences in thefts between ranks 3 and 4, and 2 and 3 than we do in the rest of the table. When grouping by 2 categorical variables (state and make_model), we are able to see the average thefts per the 48 different types of vehicle models reported spread out throughout the different states alphabetically. 
+  The largest chunk that gave me many different types of summary statistics was done in an attempt to see if there were any similarities between the data that had the more historically violent areas and modern day rates of car theft. The data was grouped by state. A new variable that served as a proportion of thefts per percentage of urban population was calculated and its variance was taken, along with the mean, standard deviation, and standard error. Total car thefts per state was also calculated to see the aggregate of the different ranks and car models. The minimum and maximum model year for cars stolen per state was also calculated and show in the table below, along with the distinct number of car models and the average number of thefts per state. All of this data is presented in the table below and starts to indicate that there is not a large correlation between historically violent areas and modern day crime. This is further confirmed and presented in the correlation matrix between all of my numeric variables and is expanded upon in the correlation heat map. 
+```{R}
+joined_data %>% 
+  filter(UrbanPop >= 50, rank <= 5, model_year >= 2010) %>%
+  arrange(desc(rank), model_year) %>% 
+  select(Murder, Assault, Rape, thefts) %>% 
+  summarize_all(mean)
+
+
+joined_data %>% 
+  filter(state == "Texas") %>%
+  group_by(state) %>%
+  arrange(desc(rank)) %>%
+  mutate(rank_diff = (thefts - lag(thefts)) / lag(thefts)) %>%
+  pivot_wider(names_from = state, values_from = rank_diff)
+
+joined_data %>% 
+  group_by(state) %>% 
+  mutate(thefts_per_urbanpop = thefts/UrbanPop) %>% 
+  summarize(mean_murder = mean(Murder, na.rm = T), 
+            sd_murder = sd(Murder, na.rm =  T), 
+            n = n(),
+            se_murder = sd_murder/sqrt(n), 
+            mean_rape = mean(Rape, na.rm = T), 
+            sd_rape = sd(Rape, na.rm =  T), 
+            se_rape = sd_rape/sqrt(n),
+            mean_assault = mean(Assault, na.rm = T), 
+            sd_assault = sd(Assault, na.rm = T), 
+            se_assault = sd_assault/sqrt(n), 
+            total_thefts = sum(thefts), 
+            n_cars = n_distinct(make_model), 
+            min_model_year = min(model_year),
+            max_model_year = max(model_year),
+            mean_car_thefts = mean(thefts, na.rm = T),
+            var_thefts = var(thefts_per_urbanpop))
+
+joined_data %>%
+  group_by(state, make_model) %>%
+  summarize(mean_car_thefts = mean(thefts, na.rm = T)) %>%
+  na.omit() %>%
+  pivot_wider(names_from = state, values_from = mean_car_thefts)
+
+cormat <- joined_data %>%
+  select_if(is.numeric) %>%
+  cor(use = "pair")
+cormat
+```
+
+#### 4. Visualizing (30 pts)
+  The correlation heat map below show that there is very little correlation across the board between our numerical values. There is a slight indication of correlation between the arrests of for murder, rape and assault with each other, but the percent of urban population does not seem to be an indicator of of these crimes, nor does it impact future rates of car theft. This is further exanded upon with my subsequent graphs. 
+  I attempted to map using a linear regression the historically violent assaults, using murder arrests as my x axis and mapping using size of the points to indicate rape arrests, to the number of car thefts in 2015 along with coloring by assault arrests. I tried faceting by state, but the graphs were incredibly difficult to read. They will be provided below, but the data is easier to read without them. There is no clear cut indication of a correlation between the older assault arrests and the new car thefts. Lastly, I attempted to show what difference in overall thefts of cars really is between the different ranks using a bar graph that was colored using the different states. Error bars were also provided. This shows a massive difference in the overall number of thefts between the first and second ranks of car stolen and the subsequent 8. This is shown below. 
+```{R fig.width=8}
+cormat[lower.tri(cormat)] <- NA
+cormat %>%
+  as.data.frame %>% 
+  rownames_to_column %>%
+  pivot_longer(-1) %>% 
+  na.omit %>%
+  ggplot(aes(rowname,name,fill=value)) + geom_tile() + geom_text(aes(label=round(value,2))) +  xlab("") + ylab("") + coord_fixed() +  scale_fill_gradient2(low="light green",mid="orange",high="yellow")
+
+ggplot(joined_data, aes(x = Murder, y = thefts, color = Assault, size = Rape)) + geom_line(aes(group = Assault)) + geom_point(size = 4, color = "black") + theme(legend.position = "none") +
+  ggtitle("Car Thefts Compared to Historically Violent Areas") + 
+    xlab("Murder Arrests in 1973") + ylab("Total Car Thefts in 2015")
+
+ggplot(joined_data, aes(x = Murder, y = thefts, color = Assault, size = Rape)) + geom_line(aes(group = Assault)) + geom_point(size = 4, color = "black") + theme(legend.position = "none") +
+  ggtitle("Car Thefts Compared to Historically Violent Areas") + 
+    xlab("Murder Arrests in 1973") + ylab("Total Car Thefts in 2015") +
+  facet_wrap(~state)
+
+
+ggplot(joined_data, aes(x = rank, y = thefts, fill = state)) + 
+    geom_bar(stat = "summary", fun = mean) + scale_fill_brewer(palette = "primary.colors") + 
+    geom_errorbar(stat = "summary", fun.data = mean_se, 
+        width = 0.5) + scale_y_continuous(name = "Car Thefts") + 
+  theme(legend.position = "none") + scale_x_continuous(name = "Car Rank", breaks = seq(1, 10, 1)) + scale_y_continuous(name = "Car Thefts", breaks = seq(10000, 80000, 10000))
+  
+```  
+
+#### 5. Dimensionality Reduction (20 pts)
+  A final test to see if there was a relationship between the two datasets was done checking to see if there was a correlation between the  historical percentage of urban population and assault arrests with future car thefts.  First, our cluster data scaled and set with only these three variables in mind. NA's were also removed. A test to determine the best number of clusters was done using the silhouette width. The graph showed that 2 clusters was the optimum amount, however we see that the average silhouette width has a value of 0.363, which indicates that there is a weak relationship in the structure and that it may be artificial. 
+  This is further solidified when using the ggpairs to demonstrate the low correlation between all 3 of these numeric variables. The accompanying graphs do not indicate a clear cut relationship between these values. Analyzing all of the data from this project, it highly suggests that the historical record of violent assaults in urban areas does not impact the more modern day rates of future crimes such as car thefts, despite my hypothesis of areas with historically more violent crime arrests being more predisposed to other forms of crime like car thefts nationwide. 
+```{R fig.width=8}
+library(cluster)
+library(GGally)
+clustdat <- joined_data %>% 
+  select(UrbanPop, Assault, thefts) %>%
+  na.omit %>%
+  scale %>%
+  as.data.frame
+
+sil_width <- vector()
+for(i in 1:15){
+  pam_fit <- pam(clustdat, k = i)
+  sil_width[i] <- pam_fit$medoids
+}
+ggplot()+geom_line(aes(x=1:15,y=sil_width))+scale_x_continuous(name="k",breaks=1:15)
+pam1 <- clustdat %>% pam(2)
+pam1$silinfo$avg.width
+plot(pam1, which = 2)
+final <- clustdat <- joined_data %>% 
+  select(UrbanPop, Assault, thefts) %>%
+  na.omit() %>%
+  scale %>%
+  as.data.frame
+pam2 <- final %>% pam(2)
+final <- final %>% mutate(cluster=as.factor(pam2$clustering))
+
+ggpairs(final, columns = 1:3, aes(color=cluster))
+``` 
+
+```{R eval=F}
+data(package = .packages(all.available = TRUE))
+```
+
+...

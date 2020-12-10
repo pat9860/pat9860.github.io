@@ -1,0 +1,30 @@
+---
+title: Test Post
+author: ''
+date: '2020-12-02'
+slug: test-post
+categories: []
+tags: []
+description: ''
+---
+# Heading of my post 
+
+Content of my post. 
+
+## Subheading 
+
+More content 
+
+```{R}
+quakes <-quakes
+hist(quakes$mag)
+
+```
+
+
+
+```{python}
+r.quakes.mag.mean
+
+```
+![](/post/2020-12-02-test-post_files/signature .png)()

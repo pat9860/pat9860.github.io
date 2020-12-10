@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Patrick Molina" />
+    
+    <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.ico">
+    <title>Project 1: Exploratory Data Analysis</title>
+    <meta name="generator" content="Hugo 0.79.0" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../../css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,200bold,400old" />
+    
+    <!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+    
+  </head>
+
+  <body>
+    <div id="wrap">
+      
+      <nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="../../"><i class="fa fa-home"></i></a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+        
+        <li><a href="../../post/">BLOG</a></li>
+        
+        <li><a href="../../projects/">PROJECTS</a></li>
+        
+        <li><a href="../../resume/">RESUME</a></li>
+        
+      
+      </ul>
+    </div>
+  </div>
+</nav>
+
+      <div class="container">
+        <div class="blog-post">
+          <h3>
+            <strong><a href="../../project/project1/">Project 1: Exploratory Data Analysis</a></strong>
+          </h3>
+        </div>
+ 
+<div class="blog-title">
+          <h4>
+         December 2, 2020 
+            &nbsp;&nbsp;
+            
+          </h4>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="blogpost">
+              
+
+
+<P style="page-break-before: always">
+
+<div id="introduction-4-pts" class="section level4">
+<h4>0. Introduction (4 pts)</h4>
+<p>I have chosen two datasets that deal with different types of crime across the United States in 2 different time periods. One dataset (USArrests) looks at arrest statistics for violent crimes across all 50 states in 1973 under the variables &quot;Murder&quot;, &quot;Assault&quot;, and &quot;Rape&quot;, along with the &quot;UrbanPop&quot; statistic that calculates the percent of the population of said state being primarily urban. State name was given as a label for the Y axis and not as its own categorical variable, so I made name of state its own variable (&quot;state&quot;). This data was taken from the McNeil monograph and is pre-installed in R. The second dataset was taken from the website &quot;Dataworld&quot; and uses data taken from the National Inurance Crime Bureau's annual &quot;Hot Wheels&quot; report that shows that 10 most stolen vehicles by state, including Washington D.C. We have 2 categorical variables in &quot;state&quot; and &quot;make_model&quot;, which is the model of the car; we also have the rank (1-10) of each car (&quot;rank&quot;), the model year for each vehicle (&quot;model_year&quot;), and the number of thefts of that car that year (&quot;thefts&quot;). These datasets interested me because I wanted to see if states that had a history of violent crime would also have a proclivity towards other types of crime. Specifically, I am interested in seeing if the states that were historically more violent kept up with the levels of crime and have more car thefts than states that were historically less violent.</p>
+<pre class="r"><code>library(tidyverse)
+
+car_thefts &lt;- read_csv(&quot;car_thefts.csv&quot;)
+data(&quot;USArrests&quot;)
+Arrests &lt;- USArrests %&gt;% mutate(state = state.name)
+glimpse(Arrests)</code></pre>
+<pre><code>## Rows: 50
+## Columns: 5
+## $ Murder   &lt;dbl&gt; 13.2, 10.0, 8.1, 8.8, 9.0, 7.9, 3.3, 5.9, 15.4, 17.4, 5.3, 2…
+## $ Assault  &lt;int&gt; 236, 263, 294, 190, 276, 204, 110, 238, 335, 211, 46, 120, 2…
+## $ UrbanPop &lt;int&gt; 58, 48, 80, 50, 91, 78, 77, 72, 80, 60, 83, 54, 83, 65, 57, …
+## $ Rape     &lt;dbl&gt; 21.2, 44.5, 31.0, 19.5, 40.6, 38.7, 11.1, 15.8, 31.9, 25.8, …
+## $ state    &lt;chr&gt; &quot;Alabama&quot;, &quot;Alaska&quot;, &quot;Arizona&quot;, &quot;Arkansas&quot;, &quot;California&quot;, &quot;C…</code></pre>
+<pre class="r"><code>glimpse(car_thefts)</code></pre>
+<pre><code>## Rows: 510
+## Columns: 5
+## $ state      &lt;chr&gt; &quot;Alabama&quot;, &quot;Alabama&quot;, &quot;Alabama&quot;, &quot;Alabama&quot;, &quot;Alabama&quot;, &quot;Al…
+## $ rank       &lt;dbl&gt; 1, 2, 3, 4, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1…
+## $ make_model &lt;chr&gt; &quot;Chevrolet Pickup (Full Size)&quot;, &quot;Ford Pickup (Full Size)&quot;,…
+## $ model_year &lt;dbl&gt; 2005, 2006, 2014, 2014, 2004, 1998, 1999, 1998, 2002, 2002…
+## $ thefts     &lt;dbl&gt; 499, 357, 205, 191, 191, 180, 152, 138, 122, 119, 147, 95,…</code></pre>
+<pre class="r"><code>head(car_thefts)</code></pre>
+<pre><code>## # A tibble: 6 x 5
+##   state    rank make_model                   model_year thefts
+##   &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;                             &lt;dbl&gt;  &lt;dbl&gt;
+## 1 Alabama     1 Chevrolet Pickup (Full Size)       2005    499
+## 2 Alabama     2 Ford Pickup (Full Size)            2006    357
+## 3 Alabama     3 Toyota Camry                       2014    205
+## 4 Alabama     4 Nissan Altima                      2014    191
+## 5 Alabama     4 Chevrolet Impala                   2004    191
+## 6 Alabama     5 Honda Accord                       1998    180</code></pre>
+<pre class="r"><code>head(Arrests)</code></pre>
+<pre><code>##   Murder Assault UrbanPop Rape      state
+## 1   13.2     236       58 21.2    Alabama
+## 2   10.0     263       48 44.5     Alaska
+## 3    8.1     294       80 31.0    Arizona
+## 4    8.8     190       50 19.5   Arkansas
+## 5    9.0     276       91 40.6 California
+## 6    7.9     204       78 38.7   Colorado</code></pre>
+</div>
+<div id="tidying-rearranging-widelong-8-pts" class="section level4">
+<h4>1. Tidying: Rearranging Wide/Long (8 pts)</h4>
+<p>Both datasets were already tidy, so I waited until after the descriptive statistics were obtained before using pivot_wider to spread out the data to be able to see the values broken down in a wider table format from the original categorical variable that they were grouped by.</p>
+</div>
+<div id="joiningmerging-8-pts" class="section level4">
+<h4>2. Joining/Merging (8 pts)</h4>
+<p>I decided to join both datasets using a full join, joining on the variable &quot;state&quot;. Both datasets are looking at different types of crime by states, with the only difference being that the car_thefts dataset also looked at statistics for Washington D.C. The decision to do a full join was due wanting to see a comprehensive breakdown of these statistics by each state. I am not looking exclusively at the crime trends of one over the other and instead and interested in seeing if a pattern is developing, which to me is visualized better using a full join. A new dataset called joined_data was made by piping the Arrests data set into a full join with car_thefts. Considering that there were more observations in the car_thefts dataset, the data from the Arrests data was duplicated for each of the different observations. Using the summarize function and looking at distinct entries for each numeric column, I was able to see all of the entries in eahc of our numeric variables. Some issues may appear, specifically in the joining variable with Washinton D.C. not being present in the Arrests dataset, thus creating NA's in my joined dataset for all of the variables imported from the Arrests dataset.</p>
+<pre class="r"><code>joined_data &lt;- Arrests %&gt;% full_join(car_thefts)
+glimpse(joined_data)</code></pre>
+<pre><code>## Rows: 510
+## Columns: 9
+## $ Murder     &lt;dbl&gt; 13.2, 13.2, 13.2, 13.2, 13.2, 13.2, 13.2, 13.2, 13.2, 13.2…
+## $ Assault    &lt;int&gt; 236, 236, 236, 236, 236, 236, 236, 236, 236, 236, 263, 263…
+## $ UrbanPop   &lt;int&gt; 58, 58, 58, 58, 58, 58, 58, 58, 58, 58, 48, 48, 48, 48, 48…
+## $ Rape       &lt;dbl&gt; 21.2, 21.2, 21.2, 21.2, 21.2, 21.2, 21.2, 21.2, 21.2, 21.2…
+## $ state      &lt;chr&gt; &quot;Alabama&quot;, &quot;Alabama&quot;, &quot;Alabama&quot;, &quot;Alabama&quot;, &quot;Alabama&quot;, &quot;Al…
+## $ rank       &lt;dbl&gt; 1, 2, 3, 4, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1…
+## $ make_model &lt;chr&gt; &quot;Chevrolet Pickup (Full Size)&quot;, &quot;Ford Pickup (Full Size)&quot;,…
+## $ model_year &lt;dbl&gt; 2005, 2006, 2014, 2014, 2004, 1998, 1999, 1998, 2002, 2002…
+## $ thefts     &lt;dbl&gt; 499, 357, 205, 191, 191, 180, 152, 138, 122, 119, 147, 95,…</code></pre>
+<pre class="r"><code>joined_data %&gt;% summarize_all(n_distinct)</code></pre>
+<pre><code>##   Murder Assault UrbanPop Rape state rank make_model model_year thefts
+## 1     44      46       37   49    51   10         48         27    344</code></pre>
+<pre class="r"><code>joined_data %&gt;% summarize_if(is.numeric, n_distinct, na.rm = T)</code></pre>
+<pre><code>##   Murder Assault UrbanPop Rape rank model_year thefts
+## 1     43      45       36   48   10         27    344</code></pre>
+</div>
+<div id="wrangling-40-pts" class="section level4">
+<h4>3. Wrangling (40 pts)</h4>
+<p>There were a couple of different statistics than I ran out of my own curiosity to see if there was actually correlation between historically violent areas and modern crimme. I first examined the average arrests for murder, assault, rape and number of car thefts in areas that historically had an urban population greater than 50, were in the top 5 of car thefts, and were newer car models. Under these conditions, there were high numbers of arrests historically and a very high number of car thefts. Looking just at Texas, I wanted to see the percent difference in thefts between each rank value. This data was then spread out using pivot_wider to see these values more appropriately. We saw greater differences in thefts between ranks 3 and 4, and 2 and 3 than we do in the rest of the table. When grouping by 2 categorical variables (state and make_model), we are able to see the average thefts per the 48 different types of vehicle models reported spread out throughout the different states alphabetically. The largest chunk that gave me many different types of summary statistics was done in an attempt to see if there were any similarities between the data that had the more historically violent areas and modern day rates of car theft. The data was grouped by state. A new variable that served as a proportion of thefts per percentage of urban population was calculated and its variance was taken, along with the mean, standard deviation, and standard error. Total car thefts per state was also calculated to see the aggregate of the different ranks and car models. The minimum and maximum model year for cars stolen per state was also calculated and show in the table below, along with the distinct number of car models and the average number of thefts per state. All of this data is presented in the table below and starts to indicate that there is not a large correlation between historically violent areas and modern day crime. This is further confirmed and presented in the correlation matrix between all of my numeric variables and is expanded upon in the correlation heat map.</p>
+<pre class="r"><code>joined_data %&gt;% filter(UrbanPop &gt;= 50, rank &lt;= 5, model_year &gt;= 
+    2010) %&gt;% arrange(desc(rank), model_year) %&gt;% select(Murder, 
+    Assault, Rape, thefts) %&gt;% summarize_all(mean)</code></pre>
+<pre><code>##     Murder  Assault     Rape   thefts
+## 1 9.729167 206.7917 22.45417 383.0833</code></pre>
+<pre class="r"><code>joined_data %&gt;% filter(state == &quot;Texas&quot;) %&gt;% group_by(state) %&gt;% 
+    arrange(desc(rank)) %&gt;% mutate(rank_diff = (thefts - lag(thefts))/lag(thefts)) %&gt;% 
+    pivot_wider(names_from = state, values_from = rank_diff)</code></pre>
+<pre><code>## # A tibble: 10 x 9
+##    Murder Assault UrbanPop  Rape  rank make_model      model_year thefts   Texas
+##     &lt;dbl&gt;   &lt;int&gt;    &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;                &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+##  1   12.7     201       80  25.5    10 Chevrolet Impa…       2007    898 NA     
+##  2   12.7     201       80  25.5     9 Nissan Altima         2012    957  0.0657
+##  3   12.7     201       80  25.5     8 Toyota Camry          2014   1030  0.0763
+##  4   12.7     201       80  25.5     7 Chevrolet Tahoe       2004   1148  0.115 
+##  5   12.7     201       80  25.5     6 Honda Civic           2000   1371  0.194 
+##  6   12.7     201       80  25.5     5 GMC Pickup (Fu…       2015   1450  0.0576
+##  7   12.7     201       80  25.5     4 Honda Accord          1997   1626  0.121 
+##  8   12.7     201       80  25.5     3 Dodge Pickup (…       2004   2898  0.782 
+##  9   12.7     201       80  25.5     2 Chevrolet Pick…       2004   6158  1.12  
+## 10   12.7     201       80  25.5     1 Ford Pickup (F…       2006   7897  0.282</code></pre>
+<pre class="r"><code>joined_data %&gt;% group_by(state) %&gt;% mutate(thefts_per_urbanpop = thefts/UrbanPop) %&gt;% 
+    summarize(mean_murder = mean(Murder, na.rm = T), sd_murder = sd(Murder, 
+        na.rm = T), n = n(), se_murder = sd_murder/sqrt(n), mean_rape = mean(Rape, 
+        na.rm = T), sd_rape = sd(Rape, na.rm = T), se_rape = sd_rape/sqrt(n), 
+        mean_assault = mean(Assault, na.rm = T), sd_assault = sd(Assault, 
+            na.rm = T), se_assault = sd_assault/sqrt(n), total_thefts = sum(thefts), 
+        n_cars = n_distinct(make_model), min_model_year = min(model_year), 
+        max_model_year = max(model_year), mean_car_thefts = mean(thefts, 
+            na.rm = T), var_thefts = var(thefts_per_urbanpop))</code></pre>
+<pre><code>## # A tibble: 51 x 17
+##    state mean_murder sd_murder     n se_murder mean_rape sd_rape se_rape
+##    &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt; &lt;int&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+##  1 Alab…        13.2         0    10         0      21.2       0       0
+##  2 Alas…        10           0    10         0      44.5       0       0
+##  3 Ariz…         8.1         0    10         0      31         0       0
+##  4 Arka…         8.8         0    10         0      19.5       0       0
+##  5 Cali…         9           0    10         0      40.6       0       0
+##  6 Colo…         7.9         0    10         0      38.7       0       0
+##  7 Conn…         3.3         0    10         0      11.1       0       0
+##  8 Dela…         5.9         0    10         0      15.8       0       0
+##  9 Dist…       NaN          NA    10        NA     NaN        NA      NA
+## 10 Flor…        15.4         0    10         0      31.9       0       0
+## # … with 41 more rows, and 9 more variables: mean_assault &lt;dbl&gt;,
+## #   sd_assault &lt;dbl&gt;, se_assault &lt;dbl&gt;, total_thefts &lt;dbl&gt;, n_cars &lt;int&gt;,
+## #   min_model_year &lt;dbl&gt;, max_model_year &lt;dbl&gt;, mean_car_thefts &lt;dbl&gt;,
+## #   var_thefts &lt;dbl&gt;</code></pre>
+<pre class="r"><code>joined_data %&gt;% group_by(state, make_model) %&gt;% summarize(mean_car_thefts = mean(thefts, 
+    na.rm = T)) %&gt;% na.omit() %&gt;% pivot_wider(names_from = state, 
+    values_from = mean_car_thefts)</code></pre>
+<pre><code>## # A tibble: 48 x 52
+##    make_model Alabama Alaska Arizona Arkansas California Colorado Connecticut
+##    &lt;chr&gt;        &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;
+##  1 Chevrolet…     191     NA      NA       76         NA       NA          NA
+##  2 Chevrolet…     499    147     850      402       6048      450          NA
+##  3 Dodge Pic…     138     44     428      127         NA      308          NA
+##  4 Ford Expl…     119     31      NA       NA         NA       NA          NA
+##  5 Ford Must…     122     NA      NA       NA         NA       NA          NA
+##  6 Ford Pick…     357     95     772      252       4504      595          NA
+##  7 GMC Picku…     152     58     246      174         NA       NA          NA
+##  8 Honda Acc…     180     46    1072      122      28345     1167         534
+##  9 Nissan Al…     191     NA     269       89       2281       NA         143
+## 10 Toyota Ca…     205     NA     210       82       5345      203         131
+## # … with 38 more rows, and 44 more variables: Delaware &lt;dbl&gt;, `District Of
+## #   Columbia` &lt;dbl&gt;, Florida &lt;dbl&gt;, Georgia &lt;dbl&gt;, Hawaii &lt;dbl&gt;, Idaho &lt;dbl&gt;,
+## #   Illinois &lt;dbl&gt;, Indiana &lt;dbl&gt;, Iowa &lt;dbl&gt;, Kansas &lt;dbl&gt;, Kentucky &lt;dbl&gt;,
+## #   Louisiana &lt;dbl&gt;, Maine &lt;dbl&gt;, Maryland &lt;dbl&gt;, Massachusetts &lt;dbl&gt;,
+## #   Michigan &lt;dbl&gt;, Minnesota &lt;dbl&gt;, Mississippi &lt;dbl&gt;, Missouri &lt;dbl&gt;,
+## #   Montana &lt;dbl&gt;, Nebraska &lt;dbl&gt;, Nevada &lt;dbl&gt;, `New Hampshire` &lt;dbl&gt;, `New
+## #   Jersey` &lt;dbl&gt;, `New Mexico` &lt;dbl&gt;, `New York` &lt;dbl&gt;, `North
+## #   Carolina` &lt;dbl&gt;, `North Dakota` &lt;dbl&gt;, Ohio &lt;dbl&gt;, Oklahoma &lt;dbl&gt;,
+## #   Oregon &lt;dbl&gt;, Pennsylvania &lt;dbl&gt;, `Rhode Island` &lt;dbl&gt;, `South
+## #   Carolina` &lt;dbl&gt;, `South Dakota` &lt;dbl&gt;, Tennessee &lt;dbl&gt;, Texas &lt;dbl&gt;,
+## #   Utah &lt;dbl&gt;, Vermont &lt;dbl&gt;, Virginia &lt;dbl&gt;, Washington &lt;dbl&gt;, `West
+## #   Virginia` &lt;dbl&gt;, Wisconsin &lt;dbl&gt;, Wyoming &lt;dbl&gt;</code></pre>
+<pre class="r"><code>cormat &lt;- joined_data %&gt;% select_if(is.numeric) %&gt;% cor(use = &quot;pair&quot;)
+cormat</code></pre>
+<pre><code>##                Murder    Assault   UrbanPop       Rape        rank  model_year
+## Murder     1.00000000 0.80187331 0.06957262 0.56357883  0.03567743  0.26186334
+## Assault    0.80187331 1.00000000 0.25887170 0.66524123  0.04000528  0.21807968
+## UrbanPop   0.06957262 0.25887170 1.00000000 0.41134124  0.06220221  0.04070706
+## Rape       0.56357883 0.66524123 0.41134124 1.00000000  0.04524286  0.01570699
+## rank       0.03567743 0.04000528 0.06220221 0.04524286  1.00000000  0.16804399
+## model_year 0.26186334 0.21807968 0.04070706 0.01570699  0.16804399  1.00000000
+## thefts     0.09768232 0.17177789 0.23746954 0.25800646 -0.16513784 -0.06985549
+##                 thefts
+## Murder      0.09768232
+## Assault     0.17177789
+## UrbanPop    0.23746954
+## Rape        0.25800646
+## rank       -0.16513784
+## model_year -0.06985549
+## thefts      1.00000000</code></pre>
+</div>
+<div id="visualizing-30-pts" class="section level4">
+<h4>4. Visualizing (30 pts)</h4>
+<p>The correlation heat map below show that there is very little correlation across the board between our numerical values. There is a slight indication of correlation between the arrests of for murder, rape and assault with each other, but the percent of urban population does not seem to be an indicator of of these crimes, nor does it impact future rates of car theft. This is further exanded upon with my subsequent graphs. I attempted to map using a linear regression the historically violent assaults, using murder arrests as my x axis and mapping using size of the points to indicate rape arrests, to the number of car thefts in 2015 along with coloring by assault arrests. I tried faceting by state, but the graphs were incredibly difficult to read. They will be provided below, but the data is easier to read without them. There is no clear cut indication of a correlation between the older assault arrests and the new car thefts. Lastly, I attempted to show what difference in overall thefts of cars really is between the different ranks using a bar graph that was colored using the different states. Error bars were also provided. This shows a massive difference in the overall number of thefts between the first and second ranks of car stolen and the subsequent 8. This is shown below.</p>
+<pre class="r"><code>cormat[lower.tri(cormat)] &lt;- NA
+cormat %&gt;% as.data.frame %&gt;% rownames_to_column %&gt;% pivot_longer(-1) %&gt;% 
+    na.omit %&gt;% ggplot(aes(rowname, name, fill = value)) + geom_tile() + 
+    geom_text(aes(label = round(value, 2))) + xlab(&quot;&quot;) + ylab(&quot;&quot;) + 
+    coord_fixed() + scale_fill_gradient2(low = &quot;light green&quot;, 
+    mid = &quot;orange&quot;, high = &quot;yellow&quot;)</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-5-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(joined_data, aes(x = Murder, y = thefts, color = Assault, 
+    size = Rape)) + geom_line(aes(group = Assault)) + geom_point(size = 4, 
+    color = &quot;black&quot;) + theme(legend.position = &quot;none&quot;) + ggtitle(&quot;Car Thefts Compared to Historically Violent Areas&quot;) + 
+    xlab(&quot;Murder Arrests in 1973&quot;) + ylab(&quot;Total Car Thefts in 2015&quot;)</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-5-2.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(joined_data, aes(x = Murder, y = thefts, color = Assault, 
+    size = Rape)) + geom_line(aes(group = Assault)) + geom_point(size = 4, 
+    color = &quot;black&quot;) + theme(legend.position = &quot;none&quot;) + ggtitle(&quot;Car Thefts Compared to Historically Violent Areas&quot;) + 
+    xlab(&quot;Murder Arrests in 1973&quot;) + ylab(&quot;Total Car Thefts in 2015&quot;) + 
+    facet_wrap(~state)</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-5-3.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(joined_data, aes(x = rank, y = thefts, fill = state)) + 
+    geom_bar(stat = &quot;summary&quot;, fun = mean) + scale_fill_brewer(palette = &quot;primary.colors&quot;) + 
+    geom_errorbar(stat = &quot;summary&quot;, fun.data = mean_se, width = 0.5) + 
+    scale_y_continuous(name = &quot;Car Thefts&quot;) + theme(legend.position = &quot;none&quot;) + 
+    scale_x_continuous(name = &quot;Car Rank&quot;, breaks = seq(1, 10, 
+        1)) + scale_y_continuous(name = &quot;Car Thefts&quot;, breaks = seq(10000, 
+    80000, 10000))</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-5-4.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+<div id="dimensionality-reduction-20-pts" class="section level4">
+<h4>5. Dimensionality Reduction (20 pts)</h4>
+<p>A final test to see if there was a relationship between the two datasets was done checking to see if there was a correlation between the historical percentage of urban population and assault arrests with future car thefts. First, our cluster data scaled and set with only these three variables in mind. NA's were also removed. A test to determine the best number of clusters was done using the silhouette width. The graph showed that 2 clusters was the optimum amount, however we see that the average silhouette width has a value of 0.363, which indicates that there is a weak relationship in the structure and that it may be artificial. This is further solidified when using the ggpairs to demonstrate the low correlation between all 3 of these numeric variables. The accompanying graphs do not indicate a clear cut relationship between these values. Analyzing all of the data from this project, it highly suggests that the historical record of violent assaults in urban areas does not impact the more modern day rates of future crimes such as car thefts, despite my hypothesis of areas with historically more violent crime arrests being more predisposed to other forms of crime like car thefts nationwide.</p>
+<pre class="r"><code>library(cluster)
+library(GGally)
+clustdat &lt;- joined_data %&gt;% select(UrbanPop, Assault, thefts) %&gt;% 
+    na.omit %&gt;% scale %&gt;% as.data.frame
+
+sil_width &lt;- vector()
+for (i in 1:15) {
+    pam_fit &lt;- pam(clustdat, k = i)
+    sil_width[i] &lt;- pam_fit$medoids
+}
+ggplot() + geom_line(aes(x = 1:15, y = sil_width)) + scale_x_continuous(name = &quot;k&quot;, 
+    breaks = 1:15)</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>pam1 &lt;- clustdat %&gt;% pam(2)
+pam1$silinfo$avg.width</code></pre>
+<pre><code>## [1] 0.3636694</code></pre>
+<pre class="r"><code>plot(pam1, which = 2)</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-6-2.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>final &lt;- clustdat &lt;- joined_data %&gt;% select(UrbanPop, Assault, 
+    thefts) %&gt;% na.omit() %&gt;% scale %&gt;% as.data.frame
+pam2 &lt;- final %&gt;% pam(2)
+final &lt;- final %&gt;% mutate(cluster = as.factor(pam2$clustering))
+
+ggpairs(final, columns = 1:3, aes(color = cluster))</code></pre>
+<p><img src="../../project/project1_files/figure-html/unnamed-chunk-6-3.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>data(package = .packages(all.available = TRUE))</code></pre>
+<p>...</p>
+</div>
+
+            
+        <hr>         <div class="related-posts">
+                <h5>Related Posts</h5>
+                
+              </div> 
+            </div>
+          </div>
+
+   <hr>  <div class="disqus">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+
+    (function() {
+      
+      
+      if (window.location.hostname == "localhost")
+        return;
+
+      var disqus_shortname = '';
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div> 
+        </div>
+      </div>
+    </div>
+
+    
+    <footer>
+  <div id="footer">
+    <div class="container">
+      <p class="text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io/">Hugo</a> and
+      <a href="http://www.github.com/nurlansu/hugo-sustain/">sustain</a> with ♥</p>
+    </div>
+  </div>
+</footer>
+<div class="footer"></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="../../js/docs.min.js"></script>
+<script src="../../js/main.js"></script>
+
+<script src="../../js/ie10-viewport-bug-workaround.js"></script>
+
+
+    
+  </body>
+</html>

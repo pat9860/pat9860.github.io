@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Welcome to my Website</title>
+    <link>/</link>
+    <description>Recent content on Welcome to my Website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    <lastBuildDate>Wed, 02 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Project 1: Exploratory Data Analysis</title>
+      <link>/project/project1/</link>
+      <pubDate>Wed, 02 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/project/project1/</guid>
+      <description>0. Introduction (4 pts) I have chosen two datasets that deal with different types of crime across the United States in 2 different time periods. One dataset (USArrests) looks at arrest statistics for violent crimes across all 50 states in 1973 under the variables &amp;quot;Murder&amp;quot;, &amp;quot;Assault&amp;quot;, and &amp;quot;Rape&amp;quot;, along with the &amp;quot;UrbanPop&amp;quot; statistic that calculates the percent of the population of said state being primarily urban. State name was given as a label for the Y axis and not as its own categorical variable, so I made name of state its own variable (&amp;quot;state&amp;quot;).</description>
+    </item>
+    
+    <item>
+      <title>Project 2: Modeling, Testing, and Predicting</title>
+      <link>/project/project2/</link>
+      <pubDate>Wed, 02 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/project/project2/</guid>
+      <description>0. (5 pts) Introduce your dataset and each of your variables (or just your main variables if you have lots) in a paragraph. What are they measuring? How many observations?
+While not the biggest fan of trading sports cards myself, I definitely come from a family of people that were avid collectors of baseball, football, and basketball cards. The money and fanatacism behind these cards is incredible and can be very lucrative for some owners.</description>
+    </item>
+    
+    <item>
+      <title>Test Post</title>
+      <link>/post/2020/12/02/test-post/</link>
+      <pubDate>Wed, 02 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2020/12/02/test-post/</guid>
+      <description>Heading of my post Content of my post.
+Subheading More content
+quakes &amp;lt;-quakes hist(quakes$mag) r.quakes.mag.mean ## &amp;lt;bound method Series.mean of 0 4.8 ## 1 4.2 ## 2 5.4 ## 3 4.1 ## 4 4.0 ## 5 4.0 ## 6 4.8 ## 7 4.4 ## 8 4.7 ## 9 4.3 ## 10 4.4 ## 11 4.6 ## 12 4.4 ## 13 4.4 ## 14 6.1 ## 15 4.3 ## 16 6.</description>
+    </item>
+    
+    <item>
+      <title>Hello R Markdown</title>
+      <link>/post/2015/07/23/hello-r-markdown/</link>
+      <pubDate>Thu, 23 Jul 2015 21:13:14 -0500</pubDate>
+      
+      <guid>/post/2015/07/23/hello-r-markdown/</guid>
+      <description>R Markdown This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
+You can embed an R code chunk like this:
+summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.98 ## 3rd Qu.</description>
+    </item>
+    
+    <item>
+      <title>Projects</title>
+      <link>/projects/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/</guid>
+      <description> Check out some of my most recent projects below:
+ Wrangling &amp;amp; Exploratory Data Analysis
+ Modeling, Inference, Prediction
+  -- </description>
+    </item>
+    
+    <item>
+      <title>Resume</title>
+      <link>/resume/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/resume/</guid>
+      <description>    </description>
+    </item>
+    
+  </channel>
+</rss>
