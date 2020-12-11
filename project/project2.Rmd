@@ -23,9 +23,9 @@ library(tidyverse)
 \newpage
 
 
-**0. (5 pts)** Introduce your dataset and each of your variables (or just your main variables if you have lots) in a paragraph. What are they measuring? How many observations?
+**0. (5 pts)** Introduction
 
-While not the biggest fan of trading sports cards myself, I definitely come from a family of people that were avid collectors of baseball, football, and basketball cards. The money and fanatacism behind these cards is incredible and can be very lucrative for some owners. This dataset decided to measure if the value of these collectible cards increased due to ownership. This was done by randomly selecting 148 total traders at a trading card show. Some of the variables are age of the participant (age), whether the trader was a card dealer or not (dealer), the number of trades per month done by the trader (trades_pm), the number of years that the trader had been involved in trading (years), which income group the trader fell in based on 8 different levels (income), what gender the trader was(gender), and their highest level of education based on 6 different levels (education). This particular study had randomly given its participants one of two different collectables, either good A or good B (shown in the variable "good"). The variable "trade"" measures whether or not the trader decided to  trade the good given to them for the other one. This dataset was derived from Stock and Watson (2007). 
+  While not the biggest fan of trading sports cards myself, I definitely come from a family of people that were avid collectors of baseball, football, and basketball cards. The money and fanatacism behind these cards is incredible and can be very lucrative for some owners. This dataset decided to measure if the value of these collectible cards increased due to ownership. This was done by randomly selecting 148 total traders at a trading card show. Some of the variables are age of the participant (age), whether the trader was a card dealer or not (dealer), the number of trades per month done by the trader (trades_pm), the number of years that the trader had been involved in trading (years), which income group the trader fell in based on 8 different levels (income), what gender the trader was(gender), and their highest level of education based on 6 different levels (education). This particular study had randomly given its participants one of two different collectables, either good A or good B (shown in the variable "good"). The variable "trade"" measures whether or not the trader decided to  trade the good given to them for the other one. This dataset was derived from Stock and Watson (2007). 
 ```{R}
 SportsCards <- read.csv("SportsCards.csv")
 head(SportsCards)
@@ -33,12 +33,12 @@ colnames(SportsCards) <- c("participant", "good", "dealer", "trades_pm", "years"
 head(SportsCards)
 glimpse(SportsCards)
 ``` 
-**1. (15 pts)** Perform a MANOVA testing whether any of your numeric variables (or a subset of them, if including them all is unreasonable or doesn't make sense) show a mean difference across levels of one of your categorical variables (3). If they do, perform univariate ANOVAs to find response(s) showing a mean difference across groups (3), and perform post-hoc t tests to find which groups differ (3). Discuss the number of tests you have performed, calculate the probability of at least one type I error (if unadjusted), and adjust the significance level accordingly (bonferroni correction) before discussing significant differences (3). Briefly discuss MANOVA assumptions and whether or not they are likely to have been met (no need for anything too in-depth) (2).
+**1. (15 pts)** MANOVA
 
   A one-way MANOVA was conducted to see the impacts of different levels of education on 3 numeric variables (age, trades made per month, and years trading). Our null hypothesis was that there was no difference between the mean of these variables based on education level, with our alternative stating that there was a difference.  An mshapiro test was done to assess the multivariate homogeneity, under which the assumption was violated. Due to this violation, no examination of covariance matrices for each group was conducted. No univariate or multivariate outliers were evident, and running a MANOVA was considered an appropriate test to run for analysis. 
   Significant differences were found among the 6 different levels of education for at least one of the numeric variables, Pillai trace = 0.24, pseudo F = 2.48, p = 0.00167.
   Univariate ANOVAs for each variable were then ran to follow up the results of the MANOVA, using the Bonferroni method to control Type 1 error rates used for these comparisons. Here we found that the univariate ANOVA for age was significant, F = 6.67, p<.0001. No type 1 error probability was calculated due to adjusted the significance level. 
-  Post hoc analysis was then done to check pairwise comparisons to see which of the education levels differed in their mean age. After adjusting for multiple comparisons (bonferroni alpha = 0.05/19 = .003), only those with no more than an 8th grade level of education differed significantly in terms of age. 19 tests were conducted in total, including 1 MANOVA, 3 ANOVAs, and 15 t tests. 
+  Post hoc analysis was then done to check pairwise comparisons to see which of the education levels differed in their mean age. After adjusting for multiple comparisons (bonferroni alpha = 0.05/19 = .003), only those with no more than an 8th grade level of education differed significantly in terms of age. 19 tests were conducted in total, including 1 MANOVA, 3 ANOVAs, and 15 t tests.
 ```{R}
 #H0: For trades made per month, number of years trading, and age of the trader, there is no difference based on education. 
 #HA: For at least one of the numeric variables, at least one level of educations mean is different. 
@@ -73,8 +73,7 @@ sapply(split(DVs, education), mshapiro_test)
 #assumption is violated 
 
 ```
-
-**2. (10 pts)** Perform some kind of randomization test on your data (that makes sense). The statistic can be anything you want (mean difference, correlation, F-statistic/ANOVA, chi-squared), etc. State null and alternative hypotheses, perform the test, and interpret the results (7). Create a plot visualizing the null distribution and the test statistic (3).
+**2. (10 pts)** Randomization Test
 
  We decided to run a randomization test looking at the mean difference in the number of years trading between men and women. My null hypothesis was that the mean number of years trading was the same for both genders, while my alternative hypothesis was that the mean number of years trading was different between the genders. 
   We found a test statistic of 3.845, which in our context meannt that males had 3.845 more years trading on average than females. This was our observed difference that was used as our test statistic. A Monte Carlo sample was taken for 5000 random permutations. Taking the mean of the vector used to store these randomization, I was unable to reject the null hypothesis. Our probability of getting a mean difference this extreme if there really was not a difference between the genders and the mean years they've been trading was 0.084, meaning that we fail reject the null. This evidence suggests that there was no difference in the mean number of years trading between men and women. A t-test was also ran to confirm this assumptiont (t= -2.9259, df = 29.63, p-value = 0.006532). Below is as plot of the null distribution and the test statistic. 
@@ -109,12 +108,7 @@ mean(rand_dist>3.845 | rand_dist < -3.845)
 #independent-samples t test for comparison
 t.test(data = SportsCards, years~gender)
 ```
-**3. (35 pts)** Build a linear regression model predicting one of your response variables from at least 2 other variables, including their interaction. Mean-center any numeric variables involved in the interaction.
-    - Interpret the coefficient estimates (do not discuss significance) (10)
-    - Plot the regression using `ggplot()` using geom_smooth(method="lm"). If your interaction is numeric by numeric, refer to code in the slides to make the plot or check out the `interactions` package, which makes this easier. If you have 3 or more predictors, just chose two of them to plot for convenience. (8)
-    - Check assumptions of linearity, normality, and homoskedasticity either graphically or using a hypothesis test (4)
-    - Regardless, recompute regression results with robust standard errors via `coeftest(..., vcov=vcovHC(...))`. Discuss significance of results, including any changes from before/after robust SEs if applicable. (8)
-    - What proportion of the variation in the outcome does your model explain? (4)
+**3. (35 pts)** Linear Regression Model
     
   We decided to test if the effect of age on trades made per month differed depending whether or not the participant was a card dealer. Our null hypothesis was that there was no difference in the effect that age would have on trades per month for dealers and non-dealers. Our alternative hypthesis was that there was a difference. We mean centered the age of the participants at the card trading show. The intercept of 5.665 was the mean/predicted trades per month made for non-dealers of average age. For people of average age, dealers had an average/predicted trades per month that was 9.161 times greater than for non-dealers. (b = 9.161, t = 6.306, p = 3.30e-09). Age was associated with trades per month, as for every 1 unit increase in age, the predicted trades per month went down by 0.193. The slope of age on trades per month for card dealers was 0.297 greater than for non-dealers. Below is a plot of this regression, with the vertical lines being 0(dashed) and the mean age (solid). The horizontal lines correspond to whether the participant was a dealer or not. 
   The assumptions for linearity, homoskedasticity, and normality were assessed using hypothesis testing and graphing. Homoskedasticity looked fine for the model, which was assessed using the Breusch-Pagan test (BP = 5.2816, df = 3, p-value = 0.1523). According to the residuals graph, linearity also looked good. The model did not pass normality, however. Using the Wilke-Shapiro test, our model was found to be non-normal (W = 0.85829, p-value = 1.28e-10). Due to being non-normal, boot-strapped standard errors would need to be calculated to adjust for this. 
@@ -159,8 +153,7 @@ summary(fit)$coef[,1:2]
 
 coeftest(fit, vcov = vcovHC(fit, type="HC1"))
 ```
-
-- **4. (5 pts)** Rerun same regression model (with the interaction), but this time compute bootstrapped standard errors (either by resampling observations or residuals). Discuss any changes you observe in SEs and p-values using these SEs compared to the original SEs and the robust SEs)
+**4. (5 pts)** Bootstrapping Standard Errors
 
   Taking a bootstrapped sample meant that we randomly sampled rows from the dataset with replacment. Due to our model failing the normality assumption, these were the standard errors we would use in order to not violate this assumption. Our bootstrapped standard errors were similar in value to our original and robust standard errors, more so to the latter. This meant that any changes in p-values would not be drastically different from the ones that were calculated with the robust standard errors.  
 ```{R fig.width=8}
@@ -178,19 +171,11 @@ samp_distn %>% t %>% as.data.frame %>%summarize_all(mean)
 
 
 ```  
-
-- **5. (25 pts)** Fit a logistic regression model predicting a binary variable (if you don't have one, make/get one) from at least two explanatory variables (interaction not necessary). 
-- Interpret coefficient estimates in context (10)
-    - Report a confusion matrix for your logistic regression (2)
-    - Compute and discuss the Accuracy, Sensitivity (TPR), Specificity (TNR), Precision (PPV), and AUC of your model (5)
-        - Using ggplot, make a density plot of the log-odds (logit) colored/grouped by your binary outcome variable (3)
-    - Generate an ROC curve (plot) and calculate AUC (either manually or with a package); interpret (5)
+**5. (25 pts)** Logistic Regression Model
     
   I created a binary categorical variable (y) by converting whether or not the participant made the trade for the rare sports item, with "yes" being equal to 1. Controlling for years trading, there is not a significant difference between 2 years of college and any of the other education levels. Controlling for years trading, graduate school has an odds of making the trade that is 0.459 times that of 2 years of college. 4 years of college has an odds of making the trade that is 1.198 times that of 2 year colleges. High school education has an odds of making the trade that is 0.407 times that 2 year college. 8th grade has an odds of making the trade that is 1.456 times that 2 year college. Having some post-high school has an odds of making the trade that is 0.797 times that of 2 year college. Controlling for education level, for every 1 unit increase in years trading, odds of making the trade for the sports memorabilia changes by a factor of e^-.006 = 0.994 (they increase by 99.4%). This is not statistically significant. Controlling for both variables, our log odds of making the trade are 0.711 (71.1%). 
   A confusion matrix is located below in the coding, along with the density plot of the log odds. 
   The probability of predicting yes for a participant that actually made the trade is 0.02 (TPR). The probability of predicting no for a participant that did not make the trade is 0.97 (TNR). The proportion of people classified as making the trade that actually did is 0.25 (PPV). The accuracy of this model is 0.65. The AUC of the model when calculated using the class_diags function was 0.62, which means that our model did a poor job of quantifying how well we were predicting. When the AUC was calculated from the ROC curve, we did get a different value, this time of 0.77. This means that the ROC curve that was calculated did a fair, almost good job at properly quantifying its prediction of who did and did not make the trade for the rare item. 
-
-
 ```{R fig.width=8}
 class_diag <- function(probs,truth){
 #CONFUSION MATRIX: CALCULATE ACCURACY, TPR, TNR, PPV
@@ -266,20 +251,13 @@ ROCplot
 
 calc_auc(ROCplot)
 ``` 
-- **6. (25 pts)** Perform a logistic regression predicting the same binary response variable from *ALL* of the rest of your variables (the more, the better!)
-    - Fit model, compute in-sample classification diagnostics (Accuracy, Sensitivity, Specificity, Precision, AUC), and interpret (5)
-    - Perform 10-fold (or repeated random sub-sampling) CV with the same model and report average out-of-sample classification diagnostics (Accuracy, Sensitivity, Specificity, Precision, and AUC); interpret AUC and compare with the in-sample metrics (10)
-       - Perform LASSO on the same model/variables. Choose lambda to give the simplest model whose accuracy is near that of the best (i.e., `lambda.1se`). Discuss which variables are retained. (5)
-    - Perform 10-fold CV using only the variables lasso selected: compare model's out-of-sample AUC to that of your logistic regressions above (5)
-
+**6. (25 pts)** K-Fold CV and LASSO
 
   We chose to predict the outcome of making the trade given all of the variables, not with their interaction however.  
 The accuracy of this model was 0.72, which is the proportion of the model actually being able to measure what it is meant to be measuring. The probability of predicting yes for a participant that actually made the trade is 0.44 (TPR). The probability of predicting no for someone who did not actually make the trade is 0.87 (TNR). The proportion of people classified as having made the trade that actually did is 0.64 (PPV). The AUC of the model is 0.77, which means that our model did a fair job at quantifying how well we were predicting. 
   This performance was overall worse for the out of sample model compared to the in sample model. Our accuracy was 0.71, out TPR was 0.36, and our TNR was 0.89. Most notably, this model was unable to calculate the precision of the model. That means that the proportion of people classified as having made the trade that actually did cannot be calculated using this data. Our AUC increased slightly, almost enough to change the classification from fair to good. This means that this model did a fair job of quantifying how well the model was predicting, despite overall performing worse than the in sample model.  
   After having performed LASSO on my model, the variables that were retained were participant number and trades per month. These were considered the most predictive variables. I do not think that what number participant a trader was would have a large impact on whether or not they made the trade, but I can understand why trades per month would. If someone has a proclivity towards making trades for other cards, that may influence their decision to trade cards for sports memorabilia. 
   The model using the LASSO variables performed worse than the logistic regression in the sample model. Our accuracy was 0.64, our TPR was 0.19, our TNR was 0.86, and this model actually calculated a precision which was 0.43. When comparing the two AUCs, we see a jump down from an estimated 0.77 to 0.70, which would mean that this model performed a worse job of quantifying how well we were predicting these outcomes. 
-
-
 ```{R fig.width=8}
 library(glmnet)
 fit4 <- glm(y~ participant + good + dealer + trades_pm + years + income + gender + education + age, data = SportsCards, family = "binomial")    

@@ -8,6 +8,15 @@
     <language>en-US</language>
     <lastBuildDate>Wed, 02 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Coming at the Same Problem Two Different Ways</title>
+      <link>/post/2020/12/02/test-post/</link>
+      <pubDate>Wed, 02 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/2020/12/02/test-post/</guid>
+      <description>Rise of the Machines I do not consider myself the most computer literate. I mean this in all sincerity. That does not mean I don&#39;t know my way around computers - all this means is that the harder nuts and bolts about computers usually flies right over my head. Introductory biostats was difficult because of its usage of R, but as I progressed in my courses I realized very quickly that the modern day Biology student, much like many other professions, was going to have to come to terms with the machine.</description>
+    </item>
+    
+    <item>
       <title>Project 1: Exploratory Data Analysis</title>
       <link>/project/project1/</link>
       <pubDate>Wed, 02 Dec 2020 00:00:00 +0000</pubDate>
@@ -22,30 +31,8 @@
       <pubDate>Wed, 02 Dec 2020 00:00:00 +0000</pubDate>
       
       <guid>/project/project2/</guid>
-      <description>0. (5 pts) Introduce your dataset and each of your variables (or just your main variables if you have lots) in a paragraph. What are they measuring? How many observations?
-While not the biggest fan of trading sports cards myself, I definitely come from a family of people that were avid collectors of baseball, football, and basketball cards. The money and fanatacism behind these cards is incredible and can be very lucrative for some owners.</description>
-    </item>
-    
-    <item>
-      <title>Test Post</title>
-      <link>/post/2020/12/02/test-post/</link>
-      <pubDate>Wed, 02 Dec 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/post/2020/12/02/test-post/</guid>
-      <description>Heading of my post Content of my post.
-Subheading More content
-quakes &amp;lt;-quakes hist(quakes$mag) r.quakes.mag.mean ## &amp;lt;bound method Series.mean of 0 4.8 ## 1 4.2 ## 2 5.4 ## 3 4.1 ## 4 4.0 ## 5 4.0 ## 6 4.8 ## 7 4.4 ## 8 4.7 ## 9 4.3 ## 10 4.4 ## 11 4.6 ## 12 4.4 ## 13 4.4 ## 14 6.1 ## 15 4.3 ## 16 6.</description>
-    </item>
-    
-    <item>
-      <title>Hello R Markdown</title>
-      <link>/post/2015/07/23/hello-r-markdown/</link>
-      <pubDate>Thu, 23 Jul 2015 21:13:14 -0500</pubDate>
-      
-      <guid>/post/2015/07/23/hello-r-markdown/</guid>
-      <description>R Markdown This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
-You can embed an R code chunk like this:
-summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.98 ## 3rd Qu.</description>
+      <description>0. (5 pts) Introduction
+While not the biggest fan of trading sports cards myself, I definitely come from a family of people that were avid collectors of baseball, football, and basketball cards. The money and fanatacism behind these cards is incredible and can be very lucrative for some owners. This dataset decided to measure if the value of these collectible cards increased due to ownership. This was done by randomly selecting 148 total traders at a trading card show.</description>
     </item>
     
     <item>
@@ -66,7 +53,7 @@ summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 2
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/resume/</guid>
-      <description>    </description>
+      <description>  </description>
     </item>
     
   </channel>

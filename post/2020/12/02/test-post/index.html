@@ -7,7 +7,7 @@
     <meta name="author" content="Patrick Molina" />
     
     <link rel="shortcut icon" type="image/x-icon" href="../../../../../img/favicon.ico">
-    <title>Test Post</title>
+    <title>Coming at the Same Problem Two Different Ways</title>
     <meta name="generator" content="Hugo 0.79.0" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="../../../../../css/main.css" />
@@ -54,7 +54,7 @@
       <div class="container">
         <div class="blog-post">
           <h3>
-            <strong><a href="../../../../../post/2020/12/02/test-post/">Test Post</a></strong>
+            <strong><a href="../../../../../post/2020/12/02/test-post/">Coming at the Same Problem Two Different Ways</a></strong>
           </h3>
         </div>
  
@@ -72,79 +72,81 @@
               
 
 
-<div id="heading-of-my-post" class="section level1">
-<h1>Heading of my post</h1>
-<p>Content of my post.</p>
-<div id="subheading" class="section level2">
-<h2>Subheading</h2>
-<p>More content</p>
-<pre class="r"><code>quakes &lt;-quakes
-hist(quakes$mag)</code></pre>
+<div id="rise-of-the-machines" class="section level1">
+<h1>Rise of the Machines</h1>
+<p>I do not consider myself the most computer literate. I mean this in all sincerity. That does not mean I don't know my way around computers - all this means is that the harder nuts and bolts about computers usually flies right over my head. Introductory biostats was difficult because of its usage of R, but as I progressed in my courses I realized very quickly that the modern day Biology student, much like many other professions, was going to have to come to terms with the machine.</p>
+<div class="figure">
+<img src="../../../../../post/2020-12-02-test-post_files/terminator.0.1.png" />
+
+</div>
+<div id="ramaissance-man" class="section level2">
+<h2>Ramaissance Man</h2>
+<p>One of my least favorite things about college was meeting people who forgot to have interests outside of their majors. You would struggle to hear about an engineer's favorite book or an art majors favorite car. Chemistry students couldn't be pressed about different philosphers, and forget about asking a music student what their favorite constellation was.</p>
+<p>Say what you will about high school classes and core courses, but they're done with the hope to expose you to a wide range of interests and to make you a well rounded student (whether or not they achieve this goal is a different story).</p>
+<p>For a myriad of reasons, some students become highly specialized in college and tend not to venture far out of their area of study. I've had a different experience - I never became obsessed with my coursework to the point of ignoring the other parts of me. I've expanded my areas of interest and haven't stuck exclusively to one thing. I'm a biology major, but I picked up a teaching certificate with future plans to influence education. My short term goals include going to lawschool and enlisting in the Army Reserves. I'm a professional musician who was taken music major level courses all throughout college, but I've also read more philosophy than I'd like to admit. I took a concious effort to not pigeonhole myself; and while this did help me in certain situation, this did hinder me in others. One of the areas that I have found a way to almost completely avoid has been fixing my computer literacy.</p>
+</div>
+</div>
+<div id="welcome-to-hell-...-i-mean-r" class="section level1">
+<h1>Welcome to hell ... I MEAN R</h1>
+<p>R isn't that bad. As far as a first program to get use to coding goes, this is by far one of the better ones I could have started off with. There is some really cool stuff you can do in R, as demonstrated here below.</p>
+<pre class="r"><code>ChickWeight &lt;- as.data.frame(ChickWeight)
+library(ggplot2)
+ggplot(ChickWeight, aes(x = Time, y = weight, color = Chick)) + 
+  geom_line(aes(group=Chick)) +
+  geom_point(size = 4, color = &quot;white&quot;) +
+  theme(legend.position = &quot;none&quot;) +
+  ggtitle(&quot;Chick Weight as a Function of Time&quot;) +
+  xlab(&quot;Time in Days since Birth&quot;) + ylab(&quot;Chick Bodyweight (gm)&quot;)</code></pre>
 <p><img src="../../../../../post/2020-12-02-test-post_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
-<pre class="python"><code>r.quakes.mag.mean</code></pre>
-<pre><code>## &lt;bound method Series.mean of 0      4.8
-## 1      4.2
-## 2      5.4
-## 3      4.1
-## 4      4.0
-## 5      4.0
-## 6      4.8
-## 7      4.4
-## 8      4.7
-## 9      4.3
-## 10     4.4
-## 11     4.6
-## 12     4.4
-## 13     4.4
-## 14     6.1
-## 15     4.3
-## 16     6.0
-## 17     4.5
-## 18     4.4
-## 19     4.4
-## 20     4.5
-## 21     4.2
-## 22     4.4
-## 23     4.7
-## 24     5.4
-## 25     4.0
-## 26     4.6
-## 27     5.2
-## 28     4.5
-## 29     4.4
-##       ... 
-## 970    4.4
-## 971    5.2
-## 972    4.7
-## 973    4.9
-## 974    4.9
-## 975    4.2
-## 976    4.4
-## 977    4.4
-## 978    4.3
-## 979    4.9
-## 980    5.0
-## 981    4.7
-## 982    4.9
-## 983    4.3
-## 984    4.5
-## 985    4.2
-## 986    5.2
-## 987    4.8
-## 988    4.0
-## 989    4.7
-## 990    4.3
-## 991    4.3
-## 992    4.9
-## 993    4.0
-## 994    4.2
-## 995    4.4
-## 996    4.7
-## 997    4.5
-## 998    4.5
-## 999    6.0
-## Name: mag, Length: 1000, dtype: float64&gt;</code></pre>
-<p><img src="../../../../../post/2020-12-02-test-post_files/signature%20.png" />()</p>
+<pre class="r"><code>r &lt;- ggplot(ChickWeight, aes(x = Time, y = weight, color = Chick)) + 
+  geom_line(aes(group=Chick)) +
+  geom_point(size = 4, color = &quot;white&quot;) +
+  theme(legend.position = &quot;none&quot;) + 
+  ggtitle(&quot;Chick Weight as a Function of Time&quot;) +
+  xlab(&quot;Time in Days since Birth&quot;) + ylab(&quot;Chick Bodyweight (gm)&quot;)</code></pre>
+<p>R can take data and present beautiful looking graphs such as this one that intricately displays all of the variables that are being measured. Here we see a graph of how chick weights differ over time between different groups of chicks. This just starts to scratch the surface, but it really shows how powerful R can be. For further examples of R being used to visualize data, please go to the &quot;Projects&quot; page of my site.</p>
+<p>So while I spent many a night banging my head against my keyboard trying to figure out why I kept getting error messages, my (now 2 courses) dedicated towards better understanding of this program had been extremely rewarding and had given me the confidence to try out programming and coding in other languages. And then ...</p>
+</div>
+<div id="a-new-challenger-appears" class="section level1">
+<h1>A New Challenger Appears</h1>
+<p>Python is hard to pick up. Much like learning a spoken language for the first time, everything feels familiar yet alien simultaneously. While we were learning Python in class, everything we did felt familiar yet strange. It was almost as if I woke up in a different dimension and everything was slightly changed, but I wasn't able to put my finger on what exactly was different. This is what coding in Python after using R for the majority of your college carreer looked like.</p>
+<div id="a-snakey-snake" class="section level2">
+<h2>A Snakey Snake</h2>
+<p>&quot;If I struggled with doing certain functions in R, there was no way I was going to learn an entirely new program by the end of the semester,&quot; I had thought early on to myself. However, much like my knowledge with R, I can comfortably say I have a working knowledge of Python. I'm not an expert, but I can say I have a surface level understanding of this snake. (It's still odd starting from the 0 position in Python as oppossed to 1 when indexing.)</p>
+<p>In order to do certain functions that are similar to those in R, additional packages may need to be downloaded. For example, in R, the in order to determine the number of observations and variables (rows and columns), we would do the following.</p>
+<pre class="r"><code>quakes &lt;- quakes
+
+dim(quakes)</code></pre>
+<pre><code>## [1] 1000    5</code></pre>
+<p>This presents us with 1000 observations and 5 variables. We saved our dataset as an object and then used the dim function to get the dimensions of our object. To get the same information using python, we would do the following.</p>
+<pre class="python"><code>r.quakes.shape
+</code></pre>
+<pre><code>## (1000, 5)</code></pre>
+<p>This is a similar process, but first we made distinct that we would be using the quakes dataset from R. Then we used the shape function to get the same number of observations and variables as we did through R. In this case, the numpy and panda packages were imported and used.</p>
+<p>Python can also be used to create strings, which become more useful once applied towards things like regular expressions, along with dictionaries, which are unordered collections of items, with each item containing a key/value pair.</p>
+<pre class="python"><code>#strings
+first = &quot;Patrick&quot;
+last = &quot;Molina&quot;
+
+first + last
+
+#dictionary</code></pre>
+<pre><code>## &#39;PatrickMolina&#39;</code></pre>
+<pre class="python"><code>my_dict = dict({1:&#39;banana&#39;, 2:&#39;cartoon&#39;})</code></pre>
+</div>
+</div>
+<div id="working-in-harmony" class="section level1">
+<h1>Working in Harmony</h1>
+<p>Python and R can be used seperately to get towards the same answer, but what about using them together?</p>
+<p>Reticulate is a package that allows you to use Python and R together. This works best when working locally instead of through a server. For example, an item can be defined in R, then defined again in Python to print out a combined item.</p>
+<pre class="r"><code>harmony &lt;- &quot;R and Python&quot;</code></pre>
+<pre class="python"><code>harmony = &quot;working together&quot;
+print(r.harmony,harmony)</code></pre>
+<pre><code>## R and Python working together</code></pre>
+<p>This is pretty cool! This also only serves as an introduction to the cool stuff you can do when using both of these programs in tandem. Like I said, while not being the most computer savy, my most recent coursework involving R and Python has absolutely sparked an interest in overcoming such a blankspot in my knowledge.</p>
+<div class="figure">
+<img src="../../../../../post/2020-12-02-test-post_files/signature%20.png" />
+
 </div>
 </div>
 

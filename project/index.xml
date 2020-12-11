@@ -22,8 +22,8 @@
       <pubDate>Wed, 02 Dec 2020 00:00:00 +0000</pubDate>
       
       <guid>/project/project2/</guid>
-      <description>0. (5 pts) Introduce your dataset and each of your variables (or just your main variables if you have lots) in a paragraph. What are they measuring? How many observations?
-While not the biggest fan of trading sports cards myself, I definitely come from a family of people that were avid collectors of baseball, football, and basketball cards. The money and fanatacism behind these cards is incredible and can be very lucrative for some owners.</description>
+      <description>0. (5 pts) Introduction
+While not the biggest fan of trading sports cards myself, I definitely come from a family of people that were avid collectors of baseball, football, and basketball cards. The money and fanatacism behind these cards is incredible and can be very lucrative for some owners. This dataset decided to measure if the value of these collectible cards increased due to ownership. This was done by randomly selecting 148 total traders at a trading card show.</description>
     </item>
     
   </channel>
